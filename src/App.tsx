@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { AppState } from "./store/rootStore";
+import { setCount } from "./store/counter/counterAction";
+import {
+  loadTodos,
+  updateTodo,
+  createTodo,
+} from "./store/dataLoader/todosActions";
+
+import Home from "./components/Home";
+import { todoItem } from "./types";
+
+interface AppProps {
+  set: (newCount: number) => void;
+  load: () => void;
+  update: (id: number, data: todoItem) => void;
+  create: (data: todoItem) => void;
 }
 
-export default App;
+const mapStateToProps = (state: AppState) => ({
+  // @ts-ignore
+  count: state.counter.count,
+  // @ts-ignore
+  todos: state.todoReducer,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): AppProps => ({
+  set: (newCount: number) => dispatch(setCount(newCount)),
+  load: () => loadTodos(dispatch),
+  update: (id: number, data: todoItem) => updateTodo(dispatch, id, data),
+  create: (data: todoItem) => createTodo(dispatch, data),
+});
+
+const App = (props: any) => {
+  return <Home {...props} />;
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
