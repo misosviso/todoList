@@ -8,6 +8,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Avatar from "@mui/material/Avatar";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import { todoItem } from "../types";
+import { green, red } from "@mui/material/colors";
 
 interface Props {
   data: todoItem;
@@ -16,35 +17,44 @@ interface Props {
 
 export default function TodoItem(props: Props) {
   const { data } = props;
-  const [checked, setChecked] = React.useState(data.isCompleted);
   const labelId = `checkbox-list-secondary-label-${data.title}`;
 
   function handleCheckBox() {
     data.isCompleted = !data.isCompleted;
     props.update(data.id, data);
-    setChecked(!checked);
   }
 
   return (
     <ListItem
+      divider={true}
       key={data.title}
+      alignItems="center"
       secondaryAction={
         <Checkbox
           edge="end"
           onChange={handleCheckBox}
-          checked={checked}
+          checked={data.isCompleted}
           inputProps={{ "aria-labelledby": labelId }}
         />
       }
-      disablePadding
+      // disablePadding
     >
       <ListItemButton>
         <ListItemAvatar>
-          <Avatar>
-            <NumbersIcon/>
-          </Avatar>
+          {data.isCompleted ? (
+            <Avatar sx={{ bgcolor: green[200] }}>
+              <NumbersIcon />
+            </Avatar>
+          ) : (
+            <Avatar sx={{ bgcolor: red[200] }}>
+              <NumbersIcon />
+            </Avatar>
+          )}
         </ListItemAvatar>
-        <ListItemText id={labelId} primary={data.title} />
+        <ListItemText inset={true} id={labelId} primary={data.title} />
+        <ListItemText inset={true} primary={data.description} />
+        <ListItemText inset={true} primary={data.deadLine.substring(0, 10)} />
+        <ListItemText inset={true} primary={data.createdAt.substring(0, 10)} />
       </ListItemButton>
     </ListItem>
   );

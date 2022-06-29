@@ -6,7 +6,7 @@ import { todoItem } from "../types";
 
 interface Props {
   set: (newCount: number) => void;
-  load: () => void;
+  load: (filter: string) => void;
   update: (id: number, data: todoItem) => void;
   create: (data: todoItem) => void;
   count: number;
@@ -14,11 +14,11 @@ interface Props {
 }
 
 export default function Home(props: Props) {
-  const { set, count, load, update, todos } = props;
+  const { set, count, load, update, create, todos } = props;
   const pageCount = Math.ceil(todos.length / 10);
 
   useEffect(() => {
-    load();
+    load("");
   }, []);
 
   // @ts-ignore
@@ -28,7 +28,7 @@ export default function Home(props: Props) {
 
   return (
     <Box>
-      <TopBar />
+      <TopBar load={load} create={create} />
       <TodoList data={todos} update={update} page={count} />
       <Pagination onChange={handleChangePage} count={pageCount} page={count} />
     </Box>

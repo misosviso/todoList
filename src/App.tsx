@@ -15,7 +15,7 @@ import { todoItem } from "./types";
 
 interface AppProps {
   set: (newCount: number) => void;
-  load: () => void;
+  load: (filter: string) => void;
   update: (id: number, data: todoItem) => void;
   create: (data: todoItem) => void;
 }
@@ -29,7 +29,7 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch): AppProps => ({
   set: (newCount: number) => dispatch(setCount(newCount)),
-  load: () => loadTodos(dispatch),
+  load: (filter = "") => loadTodos(dispatch, filter),
   update: (id: number, data: todoItem) => updateTodo(dispatch, id, data),
   create: (data: todoItem) => createTodo(dispatch, data),
 });

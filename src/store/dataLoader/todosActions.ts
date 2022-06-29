@@ -3,8 +3,8 @@ import axios from "axios";
 import { Dispatch } from "redux";
 import { todoItem } from "../../types";
 
-export const loadTodos = async (dispatch: Dispatch) => {
-  console.log("loadin todos");
+export const loadTodos = async (dispatch: Dispatch, filter: string) => {
+  console.log(`loadin todos with filter: "${filter}"`);
 
   try {
     const res = await axios.get(
@@ -12,7 +12,11 @@ export const loadTodos = async (dispatch: Dispatch) => {
     );
     dispatch({
       type: LOAD_TODOS,
-      payload: res.data,
+      payload: {
+        data: res.data,
+        filter: filter,
+      },
+      // payload: filterData(filter, res.data),
     });
   } catch (err) {
     console.log(err);
