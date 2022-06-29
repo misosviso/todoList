@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import List from "@mui/material/List";
 import TodoItem from "./TodoItem";
 import { todoItem } from "../types";
@@ -17,6 +17,7 @@ interface todoListProps {
   page: number;
   data: todoItem[];
   update: (id: number, data: todoItem) => void;
+  setPageCount: (pageCount: number) => void;
 }
 
 enum todoItemState {
@@ -30,8 +31,12 @@ export default function TodoList(props: todoListProps) {
   const last = props.page * 10;
   let { data } = props;
 
-  const [sort, setSort] = React.useState("asc");
+  const [sort, setSort] = React.useState("desc");
   const [type, setType] = React.useState(todoItemState.All);
+
+  useEffect(() => {
+    props.setPageCount(Math.ceil(data.filter(filterCompleted).length / 10));
+  }, [type]);
 
   const filterCompleted = (element: todoItem) => {
     if (type === todoItemState.Completed) {
@@ -56,6 +61,8 @@ export default function TodoList(props: todoListProps) {
     } else if (type === todoItemState.All) {
       setType(todoItemState.Completed);
     }
+
+    console.log("rows", data.filter(filterCompleted));
   };
 
   const getFilterBackground = () => {
@@ -91,7 +98,6 @@ export default function TodoList(props: todoListProps) {
           <ListItemText inset={true} primary={"deadline"} />
           <ListItemText inset={true} primary={"created at"} />
         </ListItem>
-
         {data
           .filter(filterCompleted)
           .slice(first, last)

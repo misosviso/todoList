@@ -1,5 +1,4 @@
 import * as React from "react";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -9,6 +8,7 @@ import Avatar from "@mui/material/Avatar";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import { todoItem } from "../types";
 import { green, red } from "@mui/material/colors";
+import { styled } from "@mui/system";
 
 interface Props {
   data: todoItem;

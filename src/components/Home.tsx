@@ -15,7 +15,9 @@ interface Props {
 
 export default function Home(props: Props) {
   const { set, count, load, update, create, todos } = props;
-  const pageCount = Math.ceil(todos.length / 10);
+  const defaultPageCount = Math.ceil(todos.length / 10);
+
+  const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
     load("");
@@ -26,11 +28,25 @@ export default function Home(props: Props) {
     set(page);
   }
 
+  function handlePageCount(pageCount: number) {
+    setPageCount(pageCount);
+    set(1);
+  }
+
   return (
     <Box>
       <TopBar load={load} create={create} />
-      <TodoList data={todos} update={update} page={count} />
-      <Pagination onChange={handleChangePage} count={pageCount} page={count} />
+      <TodoList
+        data={todos}
+        setPageCount={handlePageCount}
+        update={update}
+        page={count}
+      />
+      <Pagination
+        onChange={handleChangePage}
+        count={pageCount || defaultPageCount}
+        page={count}
+      />
     </Box>
   );
 }
