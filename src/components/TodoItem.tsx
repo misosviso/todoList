@@ -29,6 +29,7 @@ export default function TodoItem(props: Props) {
       divider={true}
       key={data.title}
       alignItems="center"
+      sx={{ display: "flex", alignContent: "flex-start" }}
       secondaryAction={
         <Checkbox
           edge="end"
@@ -37,7 +38,6 @@ export default function TodoItem(props: Props) {
           inputProps={{ "aria-labelledby": labelId }}
         />
       }
-      // disablePadding
     >
       <ListItemButton>
         <ListItemAvatar>
@@ -51,10 +51,29 @@ export default function TodoItem(props: Props) {
             </Avatar>
           )}
         </ListItemAvatar>
-        <ListItemText inset={true} id={labelId} primary={data.title} />
-        <ListItemText inset={true} primary={data.description} />
-        <ListItemText inset={true} primary={data.deadLine.substring(0, 10)} />
-        <ListItemText inset={true} primary={data.createdAt.substring(0, 10)} />
+        <ListItemText
+          sx={{ width: 80 }}
+          inset={true}
+          id={labelId}
+          primary={"Title: " + data.title}
+        />
+        <ListItemText
+          sx={{ width: 80 }}
+          inset={true}
+          primary={
+            "Description: " + (data.description !== "" ? data.description : "-")
+          }
+        />
+        <ListItemText
+          sx={{ width: 80 }}
+          inset={true}
+          primary={"Deadline: " + data.deadLine.substring(0, 10)}
+        />
+        <ListItemText
+          sx={{ width: 80 }}
+          inset={true}
+          primary={"Created at: " + data.createdAt.substring(0, 10)}
+        />
       </ListItemButton>
     </ListItem>
   );

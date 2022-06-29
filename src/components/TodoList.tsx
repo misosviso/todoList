@@ -31,7 +31,7 @@ export default function TodoList(props: todoListProps) {
   const last = props.page * 10;
   let { data } = props;
 
-  const [sort, setSort] = React.useState("desc");
+  const [sort, setSort] = React.useState("asc");
   const [type, setType] = React.useState(todoItemState.All);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function TodoList(props: todoListProps) {
   };
 
   const handleSortButton = (evt: any) => {
-    sort === "asc" ? setSort("desc") : setSort("desc");
+    sort === "asc" ? setSort("desc") : setSort("asc");
     data = data.reverse();
   };
 
@@ -78,11 +78,14 @@ export default function TodoList(props: todoListProps) {
   return (
     <Box>
       <List dense sx={{ width: "100%" }}>
-        <ListItem sx={{ bgcolor: grey[300] }}>
+        <ListItem
+          alignItems="center"
+          sx={{ bgcolor: grey[300], display: "flex" }}
+        >
           <IconButton
             onClick={handleSortButton}
             sx={
-              sort === "asc" ? { background: "gray" } : { background: "white" }
+              sort === "desc" ? { background: "gray" } : { background: "white" }
             }
           >
             <SortIcon />
@@ -93,10 +96,6 @@ export default function TodoList(props: todoListProps) {
           >
             <CheckIcon />
           </IconButton>
-          <ListItemText inset={true} primary={"title"} />
-          <ListItemText inset={true} primary={"description"} />
-          <ListItemText inset={true} primary={"deadline"} />
-          <ListItemText inset={true} primary={"created at"} />
         </ListItem>
         {data
           .filter(filterCompleted)

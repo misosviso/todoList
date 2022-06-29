@@ -8,16 +8,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
 import AdapterDateDayjs from "@mui/lab/AdapterDayjs";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopTimePicker from "@mui/lab/DesktopTimePicker";
-import DateTimePicker from "@mui/lab/DateTimePicker";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import { Alert, Box, Divider, Snackbar } from "@mui/material";
+import { Label } from "@mui/icons-material";
 
 interface Props {
   create: (data: any) => void;
@@ -27,6 +22,8 @@ export default function AddTodoItem(props: Props) {
   const { create } = props;
 
   const [open, setOpen] = React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
+  const [showFail, setShowFail] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDesc] = React.useState("");
   const [deadLine, setDeadline] = React.useState(new Date());
@@ -50,6 +47,7 @@ export default function AddTodoItem(props: Props) {
 
   const handleOpen = () => {
     setOpen(true);
+    setShowFail(false);
   };
 
   const handleClose = () => {
@@ -57,6 +55,12 @@ export default function AddTodoItem(props: Props) {
   };
 
   const handleCreate = () => {
+    if (title === "") {
+      setShowFail(true);
+      return;
+    }
+
+    setShowFail(false);
     const data = {
       title,
       description,
@@ -67,6 +71,7 @@ export default function AddTodoItem(props: Props) {
     };
     create(data);
     handleClose();
+    setShowSuccess(true);
   };
 
   return (
@@ -105,28 +110,46 @@ export default function AddTodoItem(props: Props) {
             variant="standard"
             onInput={handleDescInput}
           />
+          <Box>Deadline</Box>
           <LocalizationProvider dateAdapter={AdapterDateDayjs}>
             <DesktopDatePicker
-              label="Date"
-              inputFormat="MM/DD/YYYY" //depends on date lib
+              inputFormat="MM/DD/YYYY"
               value={deadLine}
-              //@ts-ignore
               onChange={handleDeadlineInput}
               renderInput={(params) => {
                 return <TextField {...params} />;
               }}
               views={["day"]}
-              showDaysOutsideCurrentMonth //very useful
-              //@ts-ignore
-              clearable //Typing seems to be missing for this
+              showDaysOutsideCurrentMonth
+              clearable
             />
           </LocalizationProvider>
+          {showFail && (
+            <DialogContentText color="red">
+              You have to provide a title in order to create a new ToDo
+            </DialogContentText>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleCreate}>Create</Button>
         </DialogActions>
       </Dialog>
+      {showSuccess && (
+        <Snackbar
+          open={showSuccess}
+          autoHideDuration={6000}
+          onClose={() => setShowSuccess(false)}
+        >
+          <Alert
+            onClose={() => setShowSuccess(false)}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            New todo item is being added
+          </Alert>
+        </Snackbar>
+      )}
     </div>
   );
 }
