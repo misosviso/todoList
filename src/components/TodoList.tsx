@@ -61,8 +61,6 @@ export default function TodoList(props: todoListProps) {
     } else if (type === todoItemState.All) {
       setType(todoItemState.Completed);
     }
-
-    console.log("rows", data.filter(filterCompleted));
   };
 
   const getFilterBackground = () => {

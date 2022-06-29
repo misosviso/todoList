@@ -4,8 +4,6 @@ import { Dispatch } from "redux";
 import { todoItem } from "../../types";
 
 export const loadTodos = async (dispatch: Dispatch, filter: string) => {
-  console.log(`loadin todos with filter: "${filter}"`);
-
   try {
     const res = await axios.get(
       "https://62b6cca9491a19c97ae9942b.mockapi.io/api/v1/todo"
@@ -28,10 +26,6 @@ export const updateTodo = async (
   id: number,
   data: todoItem
 ) => {
-  console.log(
-    `updatin' ${id} to ${data.isCompleted ? "completed" : "uncompleted"}`
-  );
-
   try {
     const res = await axios.put(
       `https://62b6cca9491a19c97ae9942b.mockapi.io/api/v1/todo/${id}`,
@@ -41,7 +35,6 @@ export const updateTodo = async (
       type: UPDATE_TODO,
       payload: data,
     });
-    console.log(res);
     return Promise.resolve(res.data);
   } catch (err) {
     return Promise.reject(err);

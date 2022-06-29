@@ -24,11 +24,9 @@ function todoReducer(todos = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case LOAD_TODOS:
-      console.log(payload.filter);
       const filtered = filterData(payload.filter, payload.data);
       return filtered;
     case UPDATE_TODO:
-      console.log("payload", payload);
       return todos.map((todo) => {
         if (todo.id === payload.id) {
           return {
